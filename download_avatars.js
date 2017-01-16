@@ -18,16 +18,39 @@ var repoName = "github-avatar-downloader"
 
 function getRepoContributors(repoOwner, repoName, cb) {
 	var requestURL = 'https://'+ GITHUB_USER + ':' + GITHUB_TOKEN + '@api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors';
-	return requestURL
+	return requestURL;		
 	}
 
-request.get(options)            // Note 1
-      .on('error', function (err) {                                   // Note 2
-        throw err;
-      })
-      .on('response', function (response) {                           // Note 3
+  request.get(options, function(error, response, body) {
+    // If we have an error, we need to deal with it.
+    if (error) {
+      // console.log("Boom! Deal with it!");
+      // console.log(error);
+      return error;
+    }
+
+    if (response) {                        
         console.log('Response Status Code: ', response.statusCode);
+    }
+
+    if (response.statusCode === 200) {
+					var data = JSON.parse(body);
+					console.log("This is the Response body:", data);
+					for (i in data) {
+						var avatar = data[i].avatar_url;
+						console.log(avatar)
+					}
+
+					console.log("Found avatar url:", avatar);
+					// cb(avatar);
+		}
+
+
+
       })
+
+
+
 
 
 getRepoContributors("jquery", "jquery")
